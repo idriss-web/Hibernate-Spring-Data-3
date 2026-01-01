@@ -158,19 +158,19 @@ Pour lancer le projet :
 
 | a                              | b                              | c                              |
 |--------------------------------|--------------------------------|--------------------------------|
-| ![a](screens/a.png)            | ![b](screens/b.png)            | ![c](screens/c.png)            |
+| ![a](screenshots/a.png)            | ![b](screenshots/b.png)            | ![c](screenshots/c.png)            |
 
 | d                              | e                              | f                              |
 |--------------------------------|--------------------------------|--------------------------------|
-| ![d](screens/d.png)            | ![e](screens/e.png)            | ![f](screens/f.png)            |
+| ![d](screenshots/d.png)            | ![e](screenshots/e.png)            | ![f](screenshots/f.png)            |
 
 | g                              | h                              | i                              |
 |--------------------------------|--------------------------------|--------------------------------|
-| ![g](screens/g.png)            | ![h](screens/h.png)            | ![i](screens/i.png)            |
+| ![g](screenshots/g.png)            | ![h](screenshots/h.png)            | ![i](screenshots/i.png)            |
 
 | j                              | k                              | l                              |
 |--------------------------------|--------------------------------|--------------------------------|
-| ![j](screens/j.png)            | ![k](screens/k.png)            | ![l](screens/l.png)            |
+| ![j](screenshots/j.png)            | ![k](screenshots/k.png)            | ![l](screenshots/l.png)            |
 
 ## Conclusion 
 

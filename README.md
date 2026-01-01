@@ -1,95 +1,178 @@
-
+[readmemd.md](https://github.com/user-attachments/files/24401463/readmemd.md)
 # Hibernate - Spring Data Many-to-Many
 
-Dans ce projet, nous avons implémenté un système de gestion des utilisateurs et des rôles
-en utilisant Spring Boot, Spring Data JPA, Hibernate et la base de données en mémoire H2.
+Ce projet explore la gestion d’une relation **Many-To-Many** entre utilisateurs et rôles. Il utilise Spring Boot, JPA/Hibernate et expose une API REST simple.
 
-Ce travail a pour objectif principal de démontrer la gestion d’une relation
-Many-To-Many entre les entités User et Role, ainsi que l’utilisation d’un service métier
-(UserService) pour gérer l’authentification et l’attribution des rôles aux utilisateurs.
+## Introduction
 
-## Technologies utilisées
+Dans ce projet, nous explorons la gestion des relations complexes entre entités dans un système d’information. L’objectif est de comprendre et de mettre en œuvre une relation **Many-To-Many** entre utilisateurs et rôles. Le projet illustre aussi la cohérence des données et l’importance d’une architecture maintenable.
 
-Spring Boot  
-Spring Data JPA  
-Hibernate  
-H2 Database  
-Lombok  
-Spring Web REST
+## Objectifs
 
-## Architecture du projet
+Les objectifs de ce projet sont :
 
-- Entités : User, Role
-- Relation : Many-To-Many
-- Service métier : UserService avec une implémentation transactionnelle
-- Repositories Spring Data : UserRepository, RoleRepository
-- Test initial au lancement (CommandLineRunner)
-- Endpoint REST permettant de consulter un utilisateur par son username
+- Créer un système flexible et robuste de gestion des utilisateurs et des rôles.  
+- Implémenter une relation **Many-To-Many** avec JPA/Hibernate.  
+- Assurer la cohérence des données via des transactions Spring et Hibernate.  
+- Exposer les fonctionnalités via une API REST sécurisée.
 
-## Description des entités
+## Technologies utilisées 
+
+| Technologie       | Rôle                                                             |
+|-------------------|------------------------------------------------------------------|
+| Spring Boot       | Socle d’une application extensible et maintenable               |
+| Spring Data JPA   | Simplification de l’accès aux données et exécution des requêtes  |
+| Hibernate         | ORM et gestion des relations **Many-To-Many**                    |
+| H2 Database       | Base légère pour tests et environnement reproductible            |
+| Lombok            | Réduction du code répétitif et amélioration de la lisibilité     |
+| Spring Web REST   | Exposition d’API REST claires et fonctionnelles                  |
+
+## Architecture
+
+Le projet suit le principe de séparation des responsabilités :
+
+- Les **repositories** gèrent la persistance et la récupération des entités.  
+- Les **services** contiennent la logique métier.  
+- Les **entités** représentent les données et leurs relations.  
+
+Cette organisation rend le code modulaire, lisible et facilement extensible.
+
+## Entités
 
 ### User
-- userId : String (UUID généré automatiquement)
-- userName : String unique
-- password : String
-- roles : liste de rôles associée (Many-To-Many)
+
+L’entité **User** représente un utilisateur du système.  
+- Identifiant unique (UUID)  
+- Nom d’utilisateur  
+- Mot de passe  
+- Relation **Many-To-Many** avec **Role**  
 
 ### Role
-- id : Long (clé primaire auto-incrémentée)
-- roleName : String
-- users : liste d’utilisateurs associés (Many-To-Many inverse)
 
-Une table d’association `USERS_ROLES` est automatiquement générée.
+L’entité **Role** définit un niveau d’autorisation.  
+- Identifiant unique  
+- Nom du rôle  
+- Relation **Many-To-Many** avec **User**
+
+### Table d’association
+
+La table **USERS_ROLES** est générée par Hibernate.  
+Elle lie les utilisateurs et les rôles sans compromettre l’intégrité des données.
+
+```mermaid
+erDiagram
+    USER {
+        string id PK
+        string username
+        string password
+    }
+    ROLE {
+        int id PK
+        string roleName
+    }
+    USERS_ROLES {
+        string user_id FK
+        int role_id FK
+    }
+    USER ||--o{ USERS_ROLES : has
+    ROLE ||--o{ USERS_ROLES : has
+```
+
+## Philosophie de conception
+
+La conception repose sur quatre principes :
+
+- **Cohérence des données**** :** transactions gérées par Spring et Hibernate.  
+- **Séparation des responsabilités** :** code propre et maintenable.  
+- **Extensibilité** :** ajout d’entités sans impact majeur.  
+- **Simplicité et clarté** :** dans le code et les interfaces.
 
 ## Fonctionnalités
 
-Ajouter des utilisateurs  
-Ajouter des rôles  
-Associer un rôle à un utilisateur  
-Authentifier un utilisateur par login et mot de passe  
-Consulter un utilisateur en API REST
+Le projet offre plusieurs fonctionnalités clés :
 
-## Exemple d’appel REST
+- Création et suppression d’utilisateurs et de rôles.  
+- Association et dissociation simples d’entités **User** et **Role**.  
+- Authentification par nom d’utilisateur et mot de passe.  
+- Consultation des utilisateurs et de leurs rôles via un endpoint REST.
 
-GET /users/{username}
+## API
 
-Réponse attendue (exemple)
+### GET /users/{username}
+
+```api
 {
-  "userId": "...",
-  "userName": "user1",
-  "roles": [
-    {"id": 1, "roleName": "STUDENT"},
-    {"id": 2, "roleName": "USER"}
-  ]
+  "title": "Récupérer un utilisateur",
+  "description": "Permet de récupérer un utilisateur et ses rôles associés par nom d’utilisateur.",
+  "method": "GET",
+  "baseUrl": "http://localhost:8080",
+  "endpoint": "/users/{username}",
+  "pathParams": [
+    {
+      "key": "username",
+      "value": "Nom d’utilisateur",
+      "required": true
+    }
+  ],
+  "headers": [
+    {
+      "key": "Authorization",
+      "value": "Bearer <token>",
+      "required": false
+    }
+  ],
+  "bodyType": "none",
+  "responses": {
+    "200": {
+      "description": "Succès",
+      "body": "{\n  \"userId\": \"...\",\n  \"userName\": \"user1\",\n  \"roles\": [\n    {\"id\": 1, \"roleName\": \"STUDENT\"},\n    {\"id\": 2, \"roleName\": \"USER\"}\n  ]\n}"
+    },
+    "404": {
+      "description": "Utilisateur non trouvé",
+      "body": "{\n  \"error\": {\"message\": \"User not found\"}\n}"
+    }
+  }
 }
+```
 
-## Exécution du projet
+## Exécution
 
-1. Cloner le projet
-2. Ouvrir dans IntelliJ et installer les dépendances Maven
-3. Lancer la classe principale Hibernate_Spring_Data_Many_To_Many_Case
-4. Accéder à H2 console : http://localhost:8080/h2-console
-5. Tester les appels API
+Pour lancer le projet :
+
+1. Cloner le dépôt :  
+   ```bash
+   git clone https://github.com/votre-repo/Hibernate_Spring_Data_Many_To_Many_Case.git
+   ```
+2. Ouvrir le projet dans un IDE compatible Maven.  
+3. Installer les dépendances :  
+   ```bash
+   mvn install
+   ```
+4. Démarrer l’application :  
+   ```bash
+   mvn spring-boot:run
+   ```
+5. Consulter la console H2 : http://localhost:8080/h2-console  
+6. Tester les endpoints via Postman ou un navigateur.
 
 ## Captures d’écran
 
-- screenshot: screenshots/a.png
-- screenshot: screenshots/b.png
-- screenshot: screenshots/c.png
-- screenshot: screenshots/d.png
-- screenshot: screenshots/e.png
-- screenshot: screenshots/f.png
-- screenshot: screenshots/g.png
-- screenshot: screenshots/h.png
-- screenshot: screenshots/i.png
-- screenshot: screenshots/j.png
-- screenshot: screenshots/k.png
-- screenshot: screenshots/l.png
+| a                              | b                              | c                              |
+|--------------------------------|--------------------------------|--------------------------------|
+| ![a](screens/a.png)            | ![b](screens/b.png)            | ![c](screens/c.png)            |
 
+| d                              | e                              | f                              |
+|--------------------------------|--------------------------------|--------------------------------|
+| ![d](screens/d.png)            | ![e](screens/e.png)            | ![f](screens/f.png)            |
 
-## Conclusion
+| g                              | h                              | i                              |
+|--------------------------------|--------------------------------|--------------------------------|
+| ![g](screens/g.png)            | ![h](screens/h.png)            | ![i](screens/i.png)            |
 
-Ce projet représente une base solide pour développer des systèmes complets de gestion
-des utilisateurs et de leurs privilèges d’accès. Il met en pratique l’ORM JPA avec
-Hibernate ainsi que le développement REST basé sur Spring Boot.
+| j                              | k                              | l                              |
+|--------------------------------|--------------------------------|--------------------------------|
+| ![j](screens/j.png)            | ![k](screens/k.png)            | ![l](screens/l.png)            |
 
+## Conclusion 
+
+Ce projet démontre la puissance des relations **Many-To-Many**, la gestion des transactions et la séparation des responsabilités. Il offre une base solide pour des évolutions futures requérant un contrôle précis des accès et une gestion efficace des entités liées.

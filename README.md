@@ -155,22 +155,30 @@ Pour lancer le projet :
 6. Tester les endpoints via Postman ou un navigateur.
 
 ## Captures d’écran
+| a | b |
+|---|---|
+| ![a](screenshots/a.png) | ![b](screenshots/b.png) |
 
-| a                              | b                              | c                              |
-|--------------------------------|--------------------------------|--------------------------------|
-| ![a](screenshots/a.png)            | ![b](screenshots/b.png)            | ![c](screenshots/c.png)            |
+| c | d |
+|---|---|
+| ![c](screenshots/c.png) | ![d](screenshots/d.png) |
 
-| d                              | e                              | f                              |
-|--------------------------------|--------------------------------|--------------------------------|
-| ![d](screenshots/d.png)            | ![e](screenshots/e.png)            | ![f](screenshots/f.png)            |
+| e | f |
+|---|---|
+| ![e](screenshots/e.png) | ![f](screenshots/f.png) |
 
-| g                              | h                              | i                              |
-|--------------------------------|--------------------------------|--------------------------------|
-| ![g](screenshots/g.png)            | ![h](screenshots/h.png)            | ![i](screenshots/i.png)            |
+| g | h |
+|---|---|
+| ![g](screenshots/g.png) | ![h](screenshots/h.png) |
 
-| j                              | k                              | l                              |
-|--------------------------------|--------------------------------|--------------------------------|
-| ![j](screenshots/j.png)            | ![k](screenshots/k.png)            | ![l](screenshots/l.png)            |
+| i | j |
+|---|---|
+| ![i](screenshots/i.png) | ![j](screenshots/j.png) |
+
+| k | l |
+|---|---|
+| ![k](screenshots/k.png) | ![l](screenshots/l.png) |
+
 
 ## Conclusion 
 

@@ -1,4 +1,3 @@
-[readmemd.md](https://github.com/user-attachments/files/24401463/readmemd.md)
 # Hibernate - Spring Data Many-to-Many
 
 Ce projet explore la gestion d’une relation **Many-To-Many** entre utilisateurs et rôles. Il utilise Spring Boot, JPA/Hibernate et expose une API REST simple.

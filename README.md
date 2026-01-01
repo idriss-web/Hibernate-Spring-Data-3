@@ -1,55 +1,95 @@
-# **Compte Rendu – Activité Pratique ORM, JPA et Spring Data**
 
-## **Introduction**
+# Hibernate - Spring Data Many-to-Many
 
-Pour cette activité pratique dans le cadre du cours **Architecture JEE** à **Mundiapolis**, j’ai voulu me familiariser avec **Spring Boot**, **JPA**, **Hibernate** et **Spring Data JPA**.  
-L’objectif était de créer une application de gestion hospitalière capable de gérer les **patients**, les **médecins**, les **rendez-vous** et les **consultations**.  
+Dans ce projet, nous avons implémenté un système de gestion des utilisateurs et des rôles
+en utilisant Spring Boot, Spring Data JPA, Hibernate et la base de données en mémoire H2.
 
-Ce projet m’a permis de comprendre comment **l’injection de dépendances** fonctionne dans Spring et comment organiser un projet en couches propres : **entités**, **repositories**, **services** et **contrôleurs REST**.
+Ce travail a pour objectif principal de démontrer la gestion d’une relation
+Many-To-Many entre les entités User et Role, ainsi que l’utilisation d’un service métier
+(UserService) pour gérer l’authentification et l’attribution des rôles aux utilisateurs.
 
----
+## Technologies utilisées
 
-## **Mise en place du projet**
+Spring Boot  
+Spring Data JPA  
+Hibernate  
+H2 Database  
+Lombok  
+Spring Web REST
 
-J’ai commencé par :  
+## Architecture du projet
 
-* Installer **IntelliJ Ultimate**.  
-* Créer un projet Spring Boot via Spring Initializer avec les dépendances :
-  - **Spring Web**
-  - **Spring Data JPA**
-  - **H2 Database**
-  - **Lombok**
-* Créer les entités JPA suivantes :
-  - **Patient** : id, nom, date de naissance, malade, liste des rendez-vous
-  - **Medecin** : id, nom, email, spécialité, liste des rendez-vous
-  - **RendezVous** : id, date, status, patient, médecin, consultation
-  - **Consultation** : id, date de consultation, rapport, rendez-vous associé
-* Créer les repositories Spring Data JPA pour chaque entité.  
-* Créer le service **IHospitalService** et son implémentation **HospitalServiceImpl** pour gérer la logique métier via **injection de dépendances**.
+- Entités : User, Role
+- Relation : Many-To-Many
+- Service métier : UserService avec une implémentation transactionnelle
+- Repositories Spring Data : UserRepository, RoleRepository
+- Test initial au lancement (CommandLineRunner)
+- Endpoint REST permettant de consulter un utilisateur par son username
 
----
+## Description des entités
 
-## **Fonctionnement**
+### User
+- userId : String (UUID généré automatiquement)
+- userName : String unique
+- password : String
+- roles : liste de rôles associée (Many-To-Many)
 
-Au démarrage de l’application, le **CommandLineRunner** insère automatiquement :
+### Role
+- id : Long (clé primaire auto-incrémentée)
+- roleName : String
+- users : liste d’utilisateurs associés (Many-To-Many inverse)
 
-* Trois patients : Mohamed, Hassan et Najat  
-* Trois médecins : Aymane, Hanane et Yasmine  
-* Un rendez-vous entre le premier patient et Yasmine  
-* Une consultation associée à ce rendez-vous avec un rapport  
+Une table d’association `USERS_ROLES` est automatiquement générée.
 
-Toutes les opérations CRUD peuvent être effectuées via le service ou les repositories directement. L’injection de dépendances permet de séparer la couche métier de la couche accès aux données. Un contrôleur REST expose la liste des patients via l’URL `/patients`.
+## Fonctionnalités
 
----
+Ajouter des utilisateurs  
+Ajouter des rôles  
+Associer un rôle à un utilisateur  
+Authentifier un utilisateur par login et mot de passe  
+Consulter un utilisateur en API REST
 
-## **Résultats**
+## Exemple d’appel REST
 
-L’application fonctionne correctement, les entités sont persistées dans la base H2 au démarrage et peuvent être consultées via l’API REST.  
-Les relations entre les **patients**, **médecins**, **rendez-vous** et **consultations** sont correctement gérées grâce aux annotations JPA et à l’injection de dépendances.  
+GET /users/{username}
 
----
+Réponse attendue (exemple)
+{
+  "userId": "...",
+  "userName": "user1",
+  "roles": [
+    {"id": 1, "roleName": "STUDENT"},
+    {"id": 2, "roleName": "USER"}
+  ]
+}
 
-## **Capture d’écran**
-![Résultat](screenshots/1.png)
+## Exécution du projet
 
+1. Cloner le projet
+2. Ouvrir dans IntelliJ et installer les dépendances Maven
+3. Lancer la classe principale Hibernate_Spring_Data_Many_To_Many_Case
+4. Accéder à H2 console : http://localhost:8080/h2-console
+5. Tester les appels API
+
+## Captures d’écran
+
+- screenshot: screenshots/a.png
+- screenshot: screenshots/b.png
+- screenshot: screenshots/c.png
+- screenshot: screenshots/d.png
+- screenshot: screenshots/e.png
+- screenshot: screenshots/f.png
+- screenshot: screenshots/g.png
+- screenshot: screenshots/h.png
+- screenshot: screenshots/i.png
+- screenshot: screenshots/j.png
+- screenshot: screenshots/k.png
+- screenshot: screenshots/l.png
+
+
+## Conclusion
+
+Ce projet représente une base solide pour développer des systèmes complets de gestion
+des utilisateurs et de leurs privilèges d’accès. Il met en pratique l’ORM JPA avec
+Hibernate ainsi que le développement REST basé sur Spring Boot.
 
